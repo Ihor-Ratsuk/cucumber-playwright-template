@@ -1,0 +1,82 @@
+name: Run Tests
+on:
+  workflow_dispatch:
+    inputs:
+      ui_root_url:
+        description: UI root URL
+        type: string
+        default: https://playwright.dev/
+        required: true
+      api_root_url:
+        description: API root URL
+        type: string
+        default: https://api.github.com
+        required: true
+      api_token:
+        description: API token
+        type: string
+        default: ""
+        required: true
+  schedule:
+    # run tests by schedule: Mon - Fri 00:00
+    - cron: '0 0 * * 0-4'
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+
+env:
+  ui_root_url: https://playwright.dev/
+  api_root_url: https://api.github.com
+  api_token: ""
+
+jobs:
+  run_tests:
+
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Tests
+        run: |
+          docker run -i --rm -v ./:/tests -w /tests \
+          --env "UI_ROOT_URL=${{ inputs.ui_root_url != 0 && inputs.ui_root_url || env.ui_root_url }}" \
+          --env "API_ROOT_URL=${{ inputs.api_root_url != 0 && inputs.api_root_url || env.api_root_url }}" \
+          --env "API_TOKEN=${{ inputs.api_token != 0 && inputs.api_token || env.api_token }}" \
+          mcr.microsoft.com/playwright:latest \
+          /bin/bash -c "npm install && npm run test"
+
+      # # this is a workaround, cucumber-js generates not valid java-junit xml file
+      # - name: Fix JUnit file
+      #   if: always()
+      #   run: |
+      #     sed -i '2i <testsuites>' .results/cucumber-report.xml
+      #     sed -i '$a</testsuites>' .results/cucumber-report.xml
+
+      - name: Publish Results Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Test Results
+          path: .results/cucumber-report.xml
+          reporter: java-junit
+          fail-on-error: 'true'
+          fail-on-empty: 'true'
+
+      - name: Publish Test Summary
+        uses: test-summary/action@v2
+        if: always()
+        with:
+          paths: .results/cucumber-report.xml
+
+      - name: Upload Test Artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: .results

@@ -1,0 +1,29 @@
+{
+  "name": "cucumber-playwright-template",
+  "version": "1.0.0",
+  "description": "Project template, for quick start with Cucumber-js, Playwright, TypeScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js -c config/cucumber.json -p default",
+    "test:automated": "cucumber-js -c config/cucumber.json -p default --tags '@automated'",
+    "test:api": "cucumber-js -c config/cucumber.json -p default --tags '@automated and @API'",
+    "test:ui": "cucumber-js -c config/cucumber.json -p default --tags '@automated and @UI'",
+    "test:debug": "cucumber-js -c config/cucumber.json -p default --tags '@debug'",
+    "debug:pw": "PWDEBUG=1 pnpm run test:debug"
+  },
+  "keywords": [
+    "cucumber-js",
+    "bdd",
+    "playwright",
+    "typescript"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cucumber/cucumber": "^10.2.1",
+    "@playwright/test": "^1.40.1",
+    "dotenv": "^16.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}

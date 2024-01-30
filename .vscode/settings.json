@@ -1,0 +1,18 @@
+{
+  "cucumber.glue": [
+    "src/**/*.ts"
+  ],
+  "cucumber.features": [
+    "features/**/*.feature"
+  ],
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": true,
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "files.eol": "\n",
+  "files.exclude": {
+    "**/node_modules/": true
+  }
+}

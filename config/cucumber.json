@@ -1,0 +1,22 @@
+{
+  "default": {
+    "format": [
+      "html:.results/cucumber-report.html",
+      "junit:.results/cucumber-report.xml",
+      "progress-bar"
+    ],
+    "formatOptions": {
+      "snippetInterface": "synchronous"
+    },
+    "requireModule": [
+      "ts-node/register"
+    ],
+    "require": [
+      "src/steps/**/*.ts",
+      "src/support/*.ts"
+    ],
+    "publish": false,
+    "worldParameters": {},
+    "strict": false
+  }
+}
